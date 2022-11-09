@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../resources/css/style.css">
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <link rel="icon" type="icon/png" href="../resources/images/VControlLogoPNG.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VControl</title>
+</head>
+
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-5-strong">
+            <div class="container-fluid">
+                <!-- Navbar brand -->
+                <a class="navbar-brand" href="dashboard.html">
+                    <img src="../resources/images/VControlLogoPNG.png" alt="VControlLogo" class="nav-logo">
+                    Inicio
+                </a>
+                <div class="row nav-row-button">
+                    <div class="col">
+                        <a href="usuarios.html" class="btn nav-button" type="button">Usuarios</a>
+                    </div>
+                    <div class="col">
+                        <a href="clientes.html" class="btn nav-button" type="button">Clientes</a>
+                    </div>
+                    <div class="col">
+                        <a class="btn nav-button" type="button">Roles</a>
+                    </div>  
+                    <div class="col d-flex justify-content-center">
+                        <a onclick="logOut()" class="btn log-out" type="button">Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="row header-main">
+            <div class="col-12 d-flex justify-content-center p-0">
+                <h1 class="welcome">Usuarios</h1>
+            </div>
+        </div>
+    </header>
+    <main class="container main-bg">
+        <div class="row mt-4">
+            <form method="post" id="search-form" class="col-6 d-flex justify-content-start">
+                <span class="input-group-text search-icon" id="search-icon">
+                    <i class="bi-search"></i>
+                </span>
+                <input id="search" class="form-control search-input" type="text" name="search" autocomplete="off"
+                    required>
+                <span class="input-group-text search-button" id="search-button">
+                    <button type="submit" class="btn" data-tooltip="Buscar">Buscar</button>
+                </span>
+            <div>
+                <!-- Recargar tabla -->
+                <button class="btn-filtro btn-second" type="button" id="limpiar"><i
+                        class="bi bi-arrow-clockwise"></i></button>
+            </div>
+            </form>
+            <div class="col-6 d-flex justify-content-end">
+                <button onclick="openCreate()" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#modal-agregarUser">
+                    <i class="bi-plus"></i>
+                    Añadir Usuario
+                </button>
+            </div>
+            <table class="user-table">
+                <!-- Cabeza de la tabla para mostrar los títulos de las columnas -->
+                <thead>
+                    <tr>
+                        <th class="text-center">Nombres</th>
+                        <th class="text-center">Apellidos</th>
+                        <th class="text-center">Correo</th>
+                        <th class="text-center">Rol</th>
+                        <th class="text-center">Acceso</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <!-- Cuerpo de la tabla para mostrar un registro por fila -->
+                <tbody id="tbody-rows"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- INICIO MODAL AGREGAR USUARIO -->
+    <div class="modal modal-agregarUser fade" id="modal-agregarUser" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-center justify-content-center">
+                    <h1 class="modal-title mt-0 fw-bold" id="modal-user-title"></h1>
+                </div>
+                <div class="modal-body">
+                    <form class="col" method="post" id="save-form-user" name="save-form-user" autocomplete="off">
+                        <div class="container">
+                            <div class="row agregar-content">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col-lg-12 d-flex flex-column justify-content-center align-items-center">
+                                            <div class="row">
+                                                <div class="col-lg-6 mt-3">
+                                                    <label>Nombres</label>
+                                                    <input type="text" class="form-control Lcorreo" id="nombres"
+                                                        name="nombres" placeholder="Escribe tus nombres"
+                                                        aria-describedby="inputGroupPrepend2" required>
+                                                </div>
+                                                <div class="col-lg-6 mt-3">
+                                                    <label>Apellidos</label>
+                                                    <input type="text" class="form-control Lcorreo" id="apellidos"
+                                                        name="apellidos" placeholder="Escribe tus apellidos"
+                                                        aria-describedby="inputGroupPrepend2" required>
+                                                </div>
+                                                <div class="col-lg-6 mt-4">
+                                                    <label>Rol</label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        id="rol" name="rol" required>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-6 mt-4">
+                                                    <label>Perfil de Acceso</label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        id="acceso" name="acceso" required>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-12 mt-4" id="col-correo-user">
+                                                    <label>Correo</label>
+                                                    <input type="email" class="form-control Lcorreo" id="correo"
+                                                        name="correo" placeholder="Escribe tu correo"
+                                                        aria-describedby="inputGroupPrepend2" required>
+                                                </div>
+                                                <div class="col-lg-6 mt-4 input-hide" id="col-estado-user">
+                                                    <label id="estado-label">Estado</label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        id="estado" name="estado" required>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 mt-4" id="div-pass">
+                                                    <label id="clave-label" for="clave">Contraseña</label>
+                                                    <input class="form-control" type="password" placeholder=""
+                                                        id="clave" name="clave" placeholder="Escribe tu contraseña"
+                                                        required aria-label=".form-control example">
+                                                </div>
+                                                <div class="col-6 mt-4" id="div-conf">
+                                                    <label id="clave2-label" for="clave2">Confirmar contraseña</label>
+                                                    <input class="form-control" type="password" placeholder=""
+                                                        id="clave2" name="clave2" placeholder="Escribe tu contraseña"
+                                                        required aria-label=".form-control example">
+                                                </div>
+                                            </div>
+                                            <div class="col col-6 mt-3">
+                                                <input class="input-hide" type="text" id="id" name="id">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-end">
+                                    <button class="btn btn-guardar" type="submit">Guardar</button>
+                                    <button class="btn btn-cancel btn-second" type="button"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FIN MODAL AGREGAR USUARIO -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../controllers/components.js"></script>
+    <script src="../controllers/dashboard/usuario.js"></script>
+</body>
+
+</html>

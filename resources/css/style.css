@@ -1,0 +1,211 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'SecularOne', sans-serif;
+  }
+
+/* Tipografías a utilizar */
+@font-face {
+    font-family: 'SecularOne';
+    src: url('../fonts/Secular_One/SecularOne-Regular.ttf') format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sunday';
+    src: url('../fonts/Sunday/sunday.ttf') format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Colores Globales */
+:root {
+    --azulMain: #00ACF0;
+}
+
+/* UTILITIES */
+.input-hide {
+    display: none;
+}
+
+/* Diseño de Login y Primer Usuario | Inicio */
+.login_background{
+    background-image: url(../images/bgmain.jpg);
+    height: 100vh;
+}
+
+.login_form{
+    position: fixed;
+    top: 4em;
+    bottom: 4em;
+    width: 1000px!important;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px 4px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.left_side{
+    background-image: url(../images/bgloginform.jpg);
+    background-size: cover;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    height: 585.2px;
+}
+
+.logo_login{
+    height: 300px;
+    width: 300px;
+    margin: auto;
+}
+
+.login-form input{
+    border-radius: 5px;
+    border-style: dashed;
+    border-color: #3A54AA;
+    background-color: #E7ECF4;
+    padding: 5px;
+    width: 80%;
+}
+
+h1{
+    color: #081E33;
+}
+
+h4{
+    color: #081E33;
+}
+
+.row .submit_button{
+    border-radius: 5px;
+    border-color: #3A54AA;
+    background-color: #E7ECF4;
+    padding: 5px;
+    margin-top: 30px;
+    width: 60%;
+}
+
+.submit_button:hover {
+    color: white !important;
+    background-color: #0d4054 !important;
+    border-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
+}
+
+.register-form input{
+    border-radius: 5px;
+    border-style: dashed;
+    border-color: #3A54AA;
+    background-color: #E7ECF4;
+    padding: 5px;
+    width: 100%;
+}
+/* Diseño de Login y Primer Usuario | Fin */
+
+/* Diseño Dashboard | Inicio */
+.body-bg{
+    background-image: url(../images/bgmain.jpg);
+}
+
+.main-bg{
+    background-color: rgba(255, 255, 255, 0)!important;
+}
+
+header{
+    background-image: url(../images/bgmain.jpg);
+}
+
+.header-main{
+    width: 100%;
+}
+
+.nav-logo{
+    height: 30px;
+    width: 30px;
+}
+
+.nav-row-button{
+    margin-right: 20px!important;
+}
+
+.nav-button{
+    color: white!important;
+    width: 100px;
+}
+
+.log-out{
+    color: white!important;
+    font-size: 11px!important;
+    width: 100px;
+    background-color: red!important;
+    margin: auto;
+}
+
+.main-bg{
+    background-color: #fff;
+    height: 53vh;
+}
+
+.welcome{
+    padding-top: 100px;
+    padding-bottom: 100px;
+    color: white;
+    font-family: 'Sunday';
+}
+
+.search-icon{
+    border-top-left-radius: 15px!important;
+    border-top-right-radius: 0px!important;
+    border-bottom-left-radius: 15px!important;
+    border-bottom-right-radius: 0px!important;
+}
+
+.search-input{
+    border-radius: 0px!important;
+}
+
+.search-button{
+    height: 38px;
+    border-bottom-right-radius: 15px!important;
+    border-bottom-left-radius: 0px!important;
+    border-top-right-radius: 15px!important;
+    border-top-left-radius: 0px!important;
+}
+
+.btn-filtro{
+    font-size: 16px;
+    border: none;
+    border-radius: 40%;
+    padding: 0 15px;
+    margin-left: 5px;
+    height: 100%;
+}
+
+.user-table{
+    margin-top: 50px!important;
+}
+
+.info-section{
+    padding-top: 10px!important;
+}
+
+th{
+    font-size: 18px;
+}
+
+.btn-edit{
+    background-color: rgb(173, 220, 243)!important;
+    height: 38px;
+    width: 100px;
+    border-radius: 10px!important;
+    margin-right: 5px;
+}
+
+.btn-delete{
+    background-color: rgb(251, 143, 143)!important;
+    height: 38px;
+    width: 100px;
+    border-radius: 10px!important;
+    margin-left: 5px;
+}
