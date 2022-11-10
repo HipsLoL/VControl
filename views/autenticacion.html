@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../resources/css/style.css">
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <link rel="icon" type="icon/png" href="../resources/images/VControlLogoPNG.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VControl</title>
+</head>
+
+<body>
+    <main class="login_background">
+        <div class="container-fluid">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="login_form col-6 justify-content-center align-items-center">
+                    <div class="row text-center">
+                        <div class="col-5 left_side d-flex justify-content-center">
+                            <img src="../resources/images/VControlLogoPNG.png" alt="LogoVControl" class="logo_login">
+                        </div>
+                        <div class="col-7 right_side d-flex justify-content-center align-items-center">
+                            <div class="row">
+                                <div class="col-12 mb-1">
+                                    <h1>Autenticación de doble factor</h1>
+                                </div>
+                                <div class="col-12 mt-1">
+                                    <p class="p-lo">Ingresa el código enviado a tu correo para poder verificar tu
+                                        identidad</p>
+                                </div>
+                                <form action="post" id="autentication-form" class="login-form">
+                                    <div class="col-12">
+                                        <h4>Código</h4>
+                                        <input type="text" placeholder="Escribe tu código" aria-label=".form-control example"
+                                                id="token" name="token" autocomplete="off" required>
+                                    </div>
+                                    <div class="col-12 mt-1 l-inp d-flex justify-content-center">
+                                        <div class="col-10">
+                                            <button type="submit" class="submit_button">Ingresar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../controllers/components.js"></script>
+    <script src="../controllers/dashboard/autenticacion.js"></script>
+</body>
+
+</html>

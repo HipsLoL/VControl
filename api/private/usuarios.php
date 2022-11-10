@@ -1,6 +1,7 @@
 <?php
 require_once('../helpers/database.php');
 require_once('../helpers/validator.php');
+require_once('../helpers/mail.php');
 require_once('../models/usuarios.php');
 
 // Se comprueba si existe una acción a realizar, de lo contrario se finaliza el script con un mensaje de error.
@@ -9,6 +10,7 @@ if (isset($_GET['action'])) {
     session_start();
     // Se instancia la clase correspondiente.
     $usuario = new Usuarios;
+    $correo = new Mail;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     $result = array('status' => 0, 'session' => 0, 'message' => null, 'exception' => null, 'dataset' => null, 'username' => null);
     // Se verifica si existe una sesión iniciada como administrador, de lo contrario se finaliza el script con un mensaje de error.
@@ -216,12 +218,36 @@ if (isset($_GET['action'])) {
                 } elseif (!$usuario->checkBlockedUser()) {
                     $result['exception'] = 'Su cuenta ha sido Inactivada o Inhabilitada. Comuníquese con su administrador.';
                 } elseif ($usuario->checkPassword($_POST['pass'])) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Autenticación correcta';
-                    $_SESSION['id_usuario'] = $usuario->getId();
-                    $_SESSION['correo_usuario'] = $usuario->getCorreo();
+                    $token = $correo->Obtener_token(4);
+                    if (!$correo->sendVerificationMessage($usuario->getCorreo(), 'Autenticación de doble factor VControl', $token)) {
+                        $result['exception'] = 'Ocurrió un error al enviar su código de verificación.';
+                    } elseif (!$usuario->insertToken($token)) {
+                        $result['exception'] = 'Ocurrió un error al guardar el token.';
+                    } else {
+                        $result['status'] = 1;
+                        $result['message'] = 'Autenticación correcta';
+                        $_SESSION['id_usuario_verification'] = $usuario->getId();
+                        $_SESSION['correo_usuario'] = $usuario->getCorreo();
+                        $result['message'] = 'Autenticación correcta, se envio un código de verificación a su correo';
+                    }
                 } else {
                     $result['exception'] = 'Clave incorrecta';
+                }
+                break;
+            //Verificación del código de autenticación
+            case 'checkVerification':
+                if (!$usuario->checkVerificationCode($_POST['token'])) {
+                    $result['status'] = 2;
+                    $result['message'] = 'Código de verificación incorrecto';
+                //Verificamos el tiempo del token, dandole una caducidad de 2 minutos
+                } elseif (!$usuario->checkTimeVerificationCode()) {
+                    $result['exception'] = 'Su código de verificación ha caducado, vuelva a iniciar sesión';
+                //Verificamos si ya se ha iniciado sesión desde la ip del dispositivo    
+                } else {
+                        $result['status'] = 1;
+                        $result['message'] = 'Código de verificación correcto';
+                        $_SESSION['id_usuario'] = $usuario->getId();
+                        $_SESSION['correo_usuario'] = $usuario->getCorreo();
                 }
                 break;
             default:

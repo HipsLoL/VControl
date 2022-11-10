@@ -147,11 +147,12 @@ class Usuarios extends Validator
     */
     public function checkUser($correo)
     {
-        $sql = 'SELECT id_usuario, id_estado_usuario FROM usuario WHERE correo_usuario = ?';
+        $sql = 'SELECT id_usuario, id_estado_usuario, correo_usuario FROM usuario WHERE correo_usuario = ?';
         $params = array($correo);
         if ($data = Database::getRow($sql, $params)) {
             $this->id = $data['id_usuario'];
             $this->estado = $data['id_estado_usuario'];
+            $this->correo = $data['correo_usuario'];
             return true;
         } else {
             return false;
@@ -182,24 +183,6 @@ class Usuarios extends Validator
         } else {
             return false;
         }
-    }
-
-    public function readProfile()
-    {
-        $sql = 'SELECT id_usuario, nombres_usuario, apellidos_usuario, correo_usuario, alias_usuario
-                FROM usuarios
-                WHERE id_usuario = ?';
-        $params = array($_SESSION['id_usuario']);
-        return Database::getRow($sql, $params);
-    }
-
-    public function editProfile()
-    {
-        $sql = 'UPDATE usuarios
-                SET nombres_usuario = ?, apellidos_usuario = ?, correo_usuario = ?
-                WHERE id_usuario = ?';
-        $params = array($this->nombres, $this->apellidos, $this->correo, $_SESSION['id_usuario']);
-        return Database::executeRow($sql, $params);
     }
 
     /*
@@ -260,5 +243,89 @@ class Usuarios extends Validator
                 WHERE id_usuario = ?';
         $params = array($this->estado_inhabilitado, $this->id);
         return Database::executeRow($sql, $params);
+    }
+
+    //Método para insertar código de verificación de dos pasos
+    public function insertToken($token)
+    {
+        $sql = "SELECT token FROM autenticacion WHERE id_usuario = ?";
+        $params = array($this->id);
+        if ($data = Database::getRow($sql, $params)) {
+            $sql = "UPDATE autenticacion
+            SET token=?, fecha_token=CURRENT_TIMESTAMP
+            WHERE id_usuario = ? RETURNING token;";
+            $params = array($token, $this->id);
+            if ($_SESSION['verification_token'] = Database::getRowId($sql, $params)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            $sql = "INSERT INTO autenticacion(token, fecha_token, id_usuario)
+            VALUES (?, CURRENT_TIMESTAMP, ?) RETURNING token;";
+            $params = array($token, $this->id);
+            // Se obtiene el ultimo valor insertado en la llave primaria de la tabla pedidos.
+            if ($_SESSION['verification_token'] = Database::getRowId($sql, $params)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    //Método para verificar que el token ingresado sea el mismo al guardado en la base
+    public function checkVerificationCode($token)
+    {
+        $sql = 'SELECT token FROM autenticacion WHERE id_usuario = ?';
+        $params = array($_SESSION['id_usuario_verification']);
+        if ($data = Database::getRow($sql, $params)) {
+            if ($token == $data['token']) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    //Método para verificar si el token ya venció
+    public function checkTimeVerificationCode()
+    {   //seteamos la zona horaria
+        ini_set('date.timezone', 'America/El_Salvador');
+        $sql = "SELECT to_char(fecha_token,'YYYY:MM:DD HH:MI:SS') as fecha_token FROM autenticacion WHERE id_usuario = ?";
+        $params = array($_SESSION['id_usuario_verification']);
+        $data = Database::getRow($sql, $params);
+
+        $currentDate = new DateTime();
+        $createdAt = new DateTime($data['fecha_token']);
+        //Le restamos 12 horas para que el formato sea el mismo
+        $createdAt->modify('-12 hour');
+        //Sacamos la diferencia entre los dos timestamps
+        $difference = $currentDate->diff($createdAt);
+        
+        //Si la diferencia es menor a 2 minutos seguimos
+        if ($difference->i < 2) { //s de segundo, h de horas, i de minutos
+
+            $sql = 'SELECT id_usuario, nombre_usuario, apellido_usuario, id_rol_usuario, id_estado_usuario, correo_usuario, id_perfil_acceso
+            FROM usuario 
+            INNER JOIN rol_usuario USING (id_rol_usuario)
+            INNER JOIN estado_usuario USING (id_estado_usuario)
+            INNER JOIN perfil_acceso USING (id_perfil_acceso)
+            WHERE id_usuario = ?';
+            $params = array($_SESSION['id_usuario_verification']);
+            
+            //Si los datos existen, retornamos true, en caso contrario false
+            if ($data = Database::getRow($sql, $params)) {
+                $this->id = $data['id_usuario'];
+                $this->estado = $data['id_estado_usuario'];
+                $this->correo = $data['correo_usuario'];
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }
