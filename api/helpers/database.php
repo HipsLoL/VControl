@@ -16,7 +16,7 @@ class Database
         $server = 'localhost';
         $database = 'VControl';
         $username = 'postgres';
-        $password = 'eduardovh12'; //admin
+        $password = 'eduardovh12';
 
         // Se crea la conexión mediante la extensión PDO y el controlador para PostgreSQL.
         self::$connection = new PDO('pgsql:host=' . $server . ';dbname=' . $database . ';port=5432', $username, $password);
@@ -203,9 +203,9 @@ class Database
             case '42P01':
                 self::$error = 'Nombre de tabla desconocido';
                 break;
-            // case '23503':
-            //     self::$error = 'Registro ocupado, no se puede eliminar';
-            //     break;
+            case '23503':
+                self::$error = 'Registro ocupado, no se puede eliminar';
+                break;
             default:
                 self::$error;
         }
